@@ -1,7 +1,7 @@
 import * as factory from "./factoryHandler";
 import Blog from "../models/blogModel";
 
-export const getAllUsers = factory.getAll(Blog);
+export const getAllBlogs = factory.getAll(Blog);
 
 export const getBlog = factory.getOne(Blog);
 

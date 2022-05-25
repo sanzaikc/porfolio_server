@@ -8,6 +8,7 @@ import AppError from "./utils/AppError";
 import GlobalErrorHandler from "./controllers/errorController";
 
 import authRouter from "./routes/authRoutes";
+import blogRouter from "./routes/blogRoutes";
 import userRouter from "./routes/userRoutes";
 import viewRoutes from "./routes/viewRoutes";
 
@@ -39,6 +40,7 @@ app.use("/", viewRoutes);
 const _base_url = "/api";
 
 app.use(`${_base_url}`, authRouter);
+app.use(`${_base_url}/blogs`, blogRouter);
 app.use(`${_base_url}/users`, userRouter);
 
 // INVALID ROUTE HANLDER
