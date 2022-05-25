@@ -1,4 +1,3 @@
-import { promisify } from "util";
 import { Request, Response, NextFunction } from "express";
 import crypto from "crypto";
 import dotenv from "dotenv";
@@ -158,9 +157,7 @@ export const signin = catchAsync(
     if (!email || !password)
       return next(new AppError("Please provide email and password", 400));
 
-    const user: UserDocument = await User.findOne({ email }).select(
-      "+password"
-    );
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user || !(await user.authenticatePassword(password, user.password))) {
       return next(new AppError("Invalid email or password", 401));
