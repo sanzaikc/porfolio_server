@@ -37,7 +37,7 @@ app.use(express.json());
 app.use("/", viewRoutes);
 
 // API ROUTES
-const _base_url = "/api";
+const _base_url: string = "/api";
 
 app.use(`${_base_url}`, authRouter);
 app.use(`${_base_url}/blogs`, blogRouter);
