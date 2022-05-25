@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import mongoose, { Schema, model, Document, Query } from "mongoose";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import validator from "validator";
@@ -6,6 +6,7 @@ import validator from "validator";
 export interface UserInput {
   name: string;
   email: string;
+  photo?: string;
   password: any;
   passwordConfirm: any;
 }
@@ -23,9 +24,11 @@ export interface UserDocument extends UserInput, Document {
   ): Promise<boolean>;
   changedPasswordAfter(timestamp: number): boolean;
   createResetPasswordToken(): string;
+
+  find: any;
 }
 
-const userSchema = new Schema({
+const userSchema = new Schema<UserDocument>({
   name: {
     type: String,
     required: [true, "Please tell us your name"],
@@ -37,7 +40,7 @@ const userSchema = new Schema({
     lowercase: true,
     validate: [validator.isEmail, "Please provide a valid email"],
   },
-  photo_url: String,
+  photo: String,
   role: {
     type: String,
     enum: {
@@ -84,8 +87,7 @@ userSchema.pre<UserDocument>("save", async function (next) {
 // Setting password change timestamp
 userSchema.pre("save", function (next) {
   if (this.isNew || !this.isModified("password")) return next();
-
-  this.passwordChangedAt = Date.now() - 1000;
+  this.passwordChangedAt = new Date(Date.now() - 1000);
 
   next();
 });
@@ -128,6 +130,6 @@ userSchema.methods.createResetPasswordToken = function (): string {
   return resetToken;
 };
 
-const User = model("User", userSchema);
+const User = model<UserDocument>("User", userSchema);
 
 export default User;

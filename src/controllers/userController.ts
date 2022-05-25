@@ -70,7 +70,7 @@ export const updateMe = catchAsync(
       );
 
     const validReq = filterObj(req.body, "name");
-    if (req.file) validReq.photo_url = req.file.filename;
+    if (req.file) validReq.photo = req.file.filename;
 
     const updatedUser = await User.findByIdAndUpdate(req.user.id, validReq, {
       new: true,
