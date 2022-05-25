@@ -5,18 +5,15 @@ import * as blogController from "./../controllers/blogController";
 
 const router = Router();
 
-// Allow only authenticated user's access
-router.use(authController.protect);
-
 router
   .route("/")
   .get(blogController.getAllBlogs)
-  .post(blogController.createBlog);
+  .post(authController.protect, blogController.createBlog);
 
 router
   .route("/:id")
   .get(blogController.getBlog)
-  .patch(blogController.updateBlog)
-  .delete(blogController.deleteBlog);
+  .patch(authController.protect, blogController.updateBlog)
+  .delete(authController.protect, blogController.deleteBlog);
 
 export default router;
