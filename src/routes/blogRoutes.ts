@@ -8,7 +8,12 @@ const router = Router();
 router
   .route("/")
   .get(blogController.getAllBlogs)
-  .post(authController.protect, blogController.createBlog);
+  .post(
+    authController.protect,
+    blogController.uploadCoverImage,
+    blogController.resizeCoverImage,
+    blogController.createBlog
+  );
 
 router
   .route("/:id")

@@ -2,12 +2,13 @@ import { Schema, Document, model } from "mongoose";
 
 export interface BlogInput {
   title: string;
-  coverImage: string;
   content: string;
+  coverImage: string;
   flair?: string;
 }
 
 export interface BlogDocument extends BlogInput, Document {
+  verified: Boolean;
   created_at: Date;
   created_by: Schema.Types.ObjectId;
 }
@@ -29,6 +30,10 @@ const blogSchema = new Schema<BlogDocument>({
       message: "Invalid blog flair",
     },
     default: "article",
+  },
+  verified: {
+    type: Boolean,
+    default: false,
   },
   created_at: {
     type: Date,

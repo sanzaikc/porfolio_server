@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
+import fs from "fs";
 import multer from "multer";
 import sharp from "sharp";
-import fs, { mkdirSync } from "fs";
 
 import { multerFilter } from "../utils/multerFilter";
 import * as factory from "./factoryHandler";
@@ -33,7 +33,7 @@ export const resizeUserPhoto = (
 
   sharp(req.file.buffer)
     .resize(500, 500, { fit: "cover" })
-    .jpeg({ quality: 90 })
+    .jpeg({ quality: 60 })
     .toFile(`${photoDestination}${req.file.filename}`);
 
   // Including the image path

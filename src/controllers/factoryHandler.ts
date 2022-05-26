@@ -4,6 +4,8 @@ import AppError from "../utils/AppError";
 import APIParams from "../utils/apiParams";
 import catchAsync from "../utils/catchAsync";
 
+const NO_DOC_FOUND: string = "Couldn't find document with that ID";
+
 export const getAll = (Model: any) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     let filter = {};
@@ -35,8 +37,7 @@ export const getOne = (Model: any, populateOptions: any = null) =>
     if (populateOptions) query = query.populate(populateOptions);
     const doc = await query;
 
-    if (!doc)
-      return next(new AppError("Couldn't find document with that ID", 404));
+    if (!doc) return next(new AppError(NO_DOC_FOUND, 404));
 
     res.status(200).json({
       status: "success",
@@ -66,8 +67,7 @@ export const updateOne = (Model: any) =>
       runValidators: true,
     });
 
-    if (!doc)
-      return next(new AppError("Couldn't find document with that ID", 404));
+    if (!doc) return next(new AppError(NO_DOC_FOUND, 404));
 
     res.status(200).json({
       status: "success",
@@ -79,8 +79,7 @@ export const deleteOne = (Model: any) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const doc = await Model.findByIdAndDelete(req.params.id);
 
-    if (!doc)
-      return next(new AppError("Couldn't find document with that ID", 404));
+    if (!doc) return next(new AppError(NO_DOC_FOUND, 404));
 
     res.status(204).json({
       status: "success",
