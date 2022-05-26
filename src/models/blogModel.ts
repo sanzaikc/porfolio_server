@@ -7,7 +7,10 @@ export interface BlogInput {
   flair?: string;
 }
 
-export interface BlogDocument extends BlogInput, Document {}
+export interface BlogDocument extends BlogInput, Document {
+  created_at: Date;
+  created_by: Schema.Types.ObjectId;
+}
 
 const blogSchema = new Schema<BlogDocument>({
   title: {
@@ -27,6 +30,23 @@ const blogSchema = new Schema<BlogDocument>({
     },
     default: "article",
   },
+  created_at: {
+    type: Date,
+    default: new Date(),
+  },
+  created_by: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+});
+
+blogSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: "created_by",
+    select: "name photo",
+  });
+
+  next();
 });
 
 export default model<BlogDocument>("Blog", blogSchema);
