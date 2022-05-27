@@ -6,6 +6,7 @@ import sharp from "sharp";
 import { multerFilter } from "../utils/multerFilter";
 import * as factory from "./factoryHandler";
 import Blog from "../models/blogModel";
+import catchAsync from "../utils/catchAsync";
 
 const imageDestination = "public/img/blogs/";
 const upload = multer({
@@ -39,6 +40,18 @@ export const resizeCoverImage = (
 
   next();
 };
+
+export const getFeaturedBlogs = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const featuredBlogs = await Blog.find({ featured: true });
+
+    res.status(200).json({
+      status: "success",
+      totalItems: featuredBlogs.length,
+      data: featuredBlogs,
+    });
+  }
+);
 
 export const getAllBlogs = factory.getAll(Blog);
 

@@ -8,9 +8,10 @@ export interface BlogInput {
 }
 
 export interface BlogDocument extends BlogInput, Document {
-  verified: Boolean;
   created_at: Date;
   created_by: Schema.Types.ObjectId;
+  featured: Boolean;
+  verified: Boolean;
 }
 
 const blogSchema = new Schema<BlogDocument>({
@@ -31,6 +32,7 @@ const blogSchema = new Schema<BlogDocument>({
     },
     default: "article",
   },
+  featured: { type: Boolean, default: false },
   verified: {
     type: Boolean,
     default: false,

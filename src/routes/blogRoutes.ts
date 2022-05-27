@@ -5,6 +5,8 @@ import * as blogController from "./../controllers/blogController";
 
 const router = Router();
 
+router.get("/featured", blogController.getFeaturedBlogs);
+
 router
   .route("/")
   .get(blogController.getAllBlogs)
