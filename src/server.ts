@@ -5,11 +5,12 @@ import app from "./app";
 
 const dataBaseUrl: string = process.env.DATABASE || "";
 const databasePassword: string = process.env.DATABASE_PASSWORD || "";
+const localDatabase: string = process.env.DATABASE_LOCAL || "";
 
-const databaseConnection: string = dataBaseUrl.replace(
-  "<password>",
-  databasePassword
-);
+const databaseConnection: string =
+  process.env.NODE_ENV === "production"
+    ? dataBaseUrl.replace("<password>", databasePassword)
+    : localDatabase;
 
 // CONNECTING MONGO DB WITH MONGOOSE DRIVER
 mongoose

@@ -18,7 +18,12 @@ router
 router
   .route("/:id")
   .get(blogController.getBlog)
-  .patch(authController.protect, blogController.updateBlog)
+  .patch(
+    authController.protect,
+    blogController.uploadCoverImage,
+    blogController.resizeCoverImage,
+    blogController.updateBlog
+  )
   .delete(authController.protect, blogController.deleteBlog);
 
 export default router;
