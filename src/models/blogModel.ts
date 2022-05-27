@@ -47,6 +47,17 @@ const blogSchema = new Schema<BlogDocument>({
   },
 });
 
+// Index
+blogSchema.index({ featured: 1 });
+
+// Sorting blogs by featured
+blogSchema.pre("find", function (next) {
+  this.sort({ featured: "desc" });
+
+  next();
+});
+
+// Populating document with author
 blogSchema.pre(/^find/, function (next) {
   this.populate({
     path: "created_by",
