@@ -47,8 +47,8 @@ export const getFeaturedBlogs = catchAsync(
 
     res.status(200).json({
       status: "success",
-      totalItems: featuredBlogs.length,
       data: featuredBlogs,
+      total_items: featuredBlogs.length,
     });
   }
 );
