@@ -10,7 +10,8 @@ import GlobalErrorHandler from "./controllers/errorController";
 import authRouter from "./routes/authRoutes";
 import blogRouter from "./routes/blogRoutes";
 import userRouter from "./routes/userRoutes";
-import viewRoutes from "./routes/viewRoutes";
+import seedRouter from "./routes/seedRoutes";
+import viewRouter from "./routes/viewRoutes";
 
 // SETTING UP ENV PATH
 dotenv.config();
@@ -34,13 +35,14 @@ app.use(cors());
 app.use(express.json());
 
 // VIEWS ROUTES
-app.use("/", viewRoutes);
+app.use("/", viewRouter);
 
 // API ROUTES
 const _base_url: string = "/api";
 
 app.use(`${_base_url}`, authRouter);
 app.use(`${_base_url}/blogs`, blogRouter);
+app.use(`${_base_url}/seed`, seedRouter);
 app.use(`${_base_url}/users`, userRouter);
 
 // INVALID ROUTE HANLDER

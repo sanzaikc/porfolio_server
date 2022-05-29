@@ -4,7 +4,7 @@ import slugify from "slugify";
 export interface BlogInput {
   title: string;
   content: string;
-  coverImage: string;
+  coverImage?: string;
   flair?: string;
 }
 
@@ -77,4 +77,6 @@ blogSchema.pre(/^find/, function (next) {
   next();
 });
 
-export default model<BlogDocument>("Blog", blogSchema);
+const Blog = model<BlogDocument>("Blog", blogSchema);
+
+export default Blog;

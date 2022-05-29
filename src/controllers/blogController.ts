@@ -69,7 +69,6 @@ export const getBySlug = catchAsync(
 );
 
 // factory methods
-
 export const getAllBlogs = factory.getAll(Blog);
 
 export const getBlog = factory.getOne(Blog);
