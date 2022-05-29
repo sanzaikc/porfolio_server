@@ -26,8 +26,8 @@ export const getAll = (Model: any) =>
 
     const total_items = await Model.count();
     const per_page: any = req.query.limit || 100;
-    const current_page = req.query.page || 1;
-    const next_page = total_items / per_page > 1;
+    const current_page: any = req.query.page || 1;
+    const next_page = total_items / per_page > current_page;
 
     res.status(200).json({
       status: "success",
