@@ -52,7 +52,7 @@ blogSchema.index({ featured: 1 });
 
 // Sorting blogs by featured
 blogSchema.pre("find", function (next) {
-  this.sort({ featured: "desc" });
+  this.sort({ featured: "desc", created_at: "desc" });
 
   next();
 });

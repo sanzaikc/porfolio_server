@@ -24,10 +24,18 @@ export const getAll = (Model: any) =>
     // const docs = await params.query.explain(); // Explains query execution
     const docs = await params.query;
 
+    const total_items = await Model.count();
+    const per_page: any = req.query.limit || 100;
+    const current_page = req.query.page || 1;
+    const next_page = total_items / per_page > 1;
+
     res.status(200).json({
       status: "success",
-      totalItems: docs.length,
       data: docs,
+      current_page,
+      total_items,
+      per_page,
+      next_page,
     });
   });
 
