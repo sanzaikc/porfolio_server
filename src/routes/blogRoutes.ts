@@ -17,8 +17,6 @@ router
     blogController.createBlog
   );
 
-router.get("/:slug", blogController.getBySlug);
-
 router
   .route("/:id")
   .get(blogController.getBlog)
@@ -29,5 +27,7 @@ router
     blogController.updateBlog
   )
   .delete(authController.protect, blogController.deleteBlog);
+
+router.get("/slug/:slug", blogController.getBySlug);
 
 export default router;

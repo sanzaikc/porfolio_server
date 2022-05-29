@@ -9,7 +9,7 @@ import Blog from "../models/blogModel";
 import catchAsync from "../utils/catchAsync";
 import User from "../models/userModel";
 
-const seedBlogs = async () => {
+const seedBlogs = async (author: string) => {
   const blogs: BlogInput[] = [];
 
   for (let index = 0; index < 20; index++) {
@@ -17,6 +17,8 @@ const seedBlogs = async () => {
       title: faker.lorem.sentence(),
       content: `<p>${faker.lorem.paragraph()}</p>`,
       flair: flairEnums[Math.floor(Math.random() * flairEnums.length)],
+      created_by: author,
+      slug: faker.lorem.slug(),
     };
 
     blogs.push(blog);
@@ -48,7 +50,7 @@ export const seedModel = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
     switch (req.params.model) {
       case "blog":
-        await seedBlogs();
+        await seedBlogs(req.user.id);
         break;
 
       case "user":
@@ -61,7 +63,19 @@ export const seedModel = catchAsync(
 
     res.json({
       status: "success",
-      message: `${req.params.model.toUpperCase()} model successfully seed`,
+      message: `${req.params.model.toUpperCase()} model successfully seeded`,
+    });
+  }
+);
+
+export const seedDB = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    await seedBlogs(req.user.id);
+    await seedUsers(req.user.id);
+
+    res.json({
+      status: "success",
+      message: "Database successfully seeded",
     });
   }
 );

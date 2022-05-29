@@ -7,6 +7,8 @@ const router = express.Router();
 
 router.use(authController.protect, authController.restrictTo("admin"));
 
+router.get("/db", seedController.seedDB);
+
 router.get("/:model", seedController.seedModel);
 
 export default router;
