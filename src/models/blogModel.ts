@@ -24,7 +24,10 @@ const blogSchema = new Schema<BlogDocument>({
     required: true,
   },
   slug: String,
-  coverImage: String,
+  coverImage: {
+    type: String,
+    default: null,
+  },
   content: {
     type: String,
     required: true,

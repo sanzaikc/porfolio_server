@@ -14,7 +14,7 @@ const seedBlogs = async () => {
 
   for (let index = 0; index < 20; index++) {
     const blog = {
-      title: faker.name.findName(),
+      title: faker.lorem.sentence(),
       content: `<p>${faker.lorem.paragraph()}</p>`,
       flair: flairEnums[Math.floor(Math.random() * flairEnums.length)],
     };

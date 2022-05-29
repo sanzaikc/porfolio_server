@@ -64,6 +64,7 @@ const userSchema = new Schema<UserDocument>({
       },
       message: "The passwords provided didn't matched",
     },
+    select: false,
   },
   passwordChangedAt: Date,
   passwordResetToken: String,
