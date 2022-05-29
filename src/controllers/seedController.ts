@@ -19,6 +19,7 @@ const seedBlogs = async (author: string) => {
       flair: flairEnums[Math.floor(Math.random() * flairEnums.length)],
       created_by: author,
       slug: faker.lorem.slug(),
+      verified: true,
     };
 
     blogs.push(blog);
