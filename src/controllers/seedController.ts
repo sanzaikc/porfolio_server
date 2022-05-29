@@ -1,28 +1,24 @@
 import { Request, Response, NextFunction } from "express";
+import { faker } from "@faker-js/faker";
 
 import { BlogInput } from "./../models/blogModel";
+import { flairEnums } from "./../models/blogModel";
+import AppError from "../utils/AppError";
 import Blog from "../models/blogModel";
 import catchAsync from "../utils/catchAsync";
-import AppError from "../utils/AppError";
 
 export const seedBlog = async () => {
-  const blogSeeds: BlogInput[] = [
-    {
-      title: "Blog 1",
-      content: "This is a blog",
-      flair: "article",
-    },
-    {
-      title: "Blog 2",
-      content: "This is a blog 2",
-      flair: "notes",
-    },
-    {
-      title: "Blog 3",
-      content: "This is a blog 3",
-      flair: "facts",
-    },
-  ];
+  const blogSeeds: BlogInput[] = [];
+
+  for (let index = 0; index < 20; index++) {
+    const blog = {
+      title: faker.name.findName(),
+      content: `<p>${faker.lorem.paragraph()}</p>`,
+      flair: flairEnums[Math.floor(Math.random() * flairEnums.length)],
+    };
+
+    blogSeeds.push(blog);
+  }
 
   await Blog.deleteMany();
   await Blog.insertMany(blogSeeds);
@@ -30,8 +26,6 @@ export const seedBlog = async () => {
 
 export const seedModel = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.params.model);
-
     switch (req.params.model) {
       case "blog":
         await seedBlog();
@@ -43,9 +37,9 @@ export const seedModel = catchAsync(
 
     res.json({
       status: "success",
-      message: "Seeded successfully",
+      message: `${req.params.model.toUpperCase()} model successfully seed`,
     });
-    ``;
+
     next();
   }
 );

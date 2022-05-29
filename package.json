@@ -12,6 +12,7 @@
   "author": "Sanjay Khatri",
   "license": "ISC",
   "devDependencies": {
+    "@faker-js/faker": "^7.1.0",
     "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.12",
     "@types/ejs": "^3.1.0",

@@ -1,6 +1,8 @@
 import { Schema, Document, model } from "mongoose";
 import slugify from "slugify";
 
+export const flairEnums: string[] = ["article", "notes", "facts"];
+
 export interface BlogInput {
   title: string;
   content: string;
@@ -30,7 +32,7 @@ const blogSchema = new Schema<BlogDocument>({
   flair: {
     type: String,
     enum: {
-      values: ["article", "notes", "facts"],
+      values: flairEnums,
       message: "Invalid blog flair",
     },
     default: "article",
