@@ -9,10 +9,10 @@ import Blog from "../models/blogModel";
 import catchAsync from "../utils/catchAsync";
 import User from "../models/userModel";
 
-const seedBlogs = async (author: string) => {
+const seedBlogs = async (author: string, quantity: any = 20) => {
   const blogs: BlogInput[] = [];
 
-  for (let index = 0; index < 20; index++) {
+  for (let index = 0; index < quantity; index++) {
     const blog = {
       title: faker.lorem.sentence(),
       content: `<p>${faker.lorem.paragraph()}</p>`,
@@ -29,10 +29,10 @@ const seedBlogs = async (author: string) => {
   await Blog.insertMany(blogs);
 };
 
-const seedUsers = async (excludeDelete: string) => {
+const seedUsers = async (excludeDelete: string, quantity: any = 20) => {
   const users: UserInput[] = [];
 
-  for (let index = 0; index < 20; index++) {
+  for (let index = 0; index < quantity; index++) {
     const user = {
       name: faker.name.findName(),
       email: faker.internet.email(),
@@ -49,13 +49,15 @@ const seedUsers = async (excludeDelete: string) => {
 
 export const seedModel = catchAsync(
   async (req: Request, res: Response, next: NextFunction) => {
+    const quantity = req.query.quantity;
+
     switch (req.params.model) {
       case "blog":
-        await seedBlogs(req.user.id);
+        await seedBlogs(req.user.id, quantity);
         break;
 
       case "user":
-        await seedUsers(req.user.id);
+        await seedUsers(req.user.id, quantity);
         break;
 
       default:
