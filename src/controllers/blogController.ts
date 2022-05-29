@@ -6,6 +6,7 @@ import sharp from "sharp";
 import { multerFilter } from "../utils/multerFilter";
 import * as factory from "./factoryHandler";
 import Blog from "../models/blogModel";
+import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
 
 const imageDestination = "public/img/blogs/";
@@ -52,6 +53,22 @@ export const getFeaturedBlogs = catchAsync(
     });
   }
 );
+
+export const getBySlug = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const blog = await Blog.findOne({ slug: req.params.slug });
+
+    if (!blog)
+      return next(new AppError("Cannot find blog with that slug", 404));
+
+    res.status(200).json({
+      status: "success",
+      data: blog,
+    });
+  }
+);
+
+// factory methods
 
 export const getAllBlogs = factory.getAll(Blog);
 

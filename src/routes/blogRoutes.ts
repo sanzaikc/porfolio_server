@@ -17,6 +17,8 @@ router
     blogController.createBlog
   );
 
+router.get("/:slug", blogController.getBySlug);
+
 router
   .route("/:id")
   .get(blogController.getBlog)

@@ -1,4 +1,5 @@
 import { Schema, Document, model } from "mongoose";
+import slugify from "slugify";
 
 export interface BlogInput {
   title: string;
@@ -8,6 +9,7 @@ export interface BlogInput {
 }
 
 export interface BlogDocument extends BlogInput, Document {
+  slug: String;
   created_at: Date;
   created_by: Schema.Types.ObjectId;
   featured: Boolean;
@@ -19,6 +21,7 @@ const blogSchema = new Schema<BlogDocument>({
     type: String,
     required: true,
   },
+  slug: String,
   coverImage: String,
   content: {
     type: String,
@@ -49,6 +52,13 @@ const blogSchema = new Schema<BlogDocument>({
 
 // Index
 blogSchema.index({ featured: 1 });
+
+// Attacting slug before saving doc
+blogSchema.pre("save", function (next) {
+  this.slug = slugify(this.title, { lower: true });
+
+  next();
+});
 
 // Sorting blogs by featured
 blogSchema.pre("find", function (next) {
