@@ -68,6 +68,17 @@ export const getBySlug = catchAsync(
   }
 );
 
+export const getLoggedInUserBlog = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const blogs = await Blog.find({ created_by: req.user.id });
+
+    res.status(200).json({
+      status: "success",
+      data: blogs,
+    });
+  }
+);
+
 // factory methods
 export const getAllBlogs = factory.getAll(Blog);
 

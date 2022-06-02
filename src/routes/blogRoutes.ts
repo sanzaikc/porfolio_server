@@ -17,6 +17,8 @@ router
     blogController.createBlog
   );
 
+router.get("/user", authController.protect, blogController.getLoggedInUserBlog);
+
 router
   .route("/:id")
   .get(blogController.getBlog)
