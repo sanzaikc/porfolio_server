@@ -16,6 +16,7 @@ export interface BlogDocument extends BlogInput, Document {
   created_by: Schema.Types.ObjectId;
   featured: Boolean;
   verified: Boolean;
+  disable_comments: Boolean;
 }
 
 const blogSchema = new Schema<BlogDocument>({
@@ -52,6 +53,10 @@ const blogSchema = new Schema<BlogDocument>({
   created_by: {
     type: Schema.Types.ObjectId,
     ref: "User",
+  },
+  disable_comments: {
+    type: Boolean,
+    default: false,
   },
 });
 
