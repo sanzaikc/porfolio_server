@@ -55,7 +55,7 @@ export const getOne = (Model: any, populateOptions: any = null) =>
 
 export const createOne = (Model: any) =>
   catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-    // Created by reference
+    // setting up created_by
     if (Model.collection.collectionName !== "users") {
       req.body.created_by = req.user.id;
     }
