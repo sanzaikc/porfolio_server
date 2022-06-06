@@ -2,8 +2,11 @@ import { Router } from "express";
 
 import * as authController from "./../controllers/authController";
 import * as blogController from "./../controllers/blogController";
+import commentRouter from "./commentRoutes";
 
 const router = Router();
+
+router.use("/:blogId/comments", commentRouter);
 
 router.get("/featured", blogController.getFeaturedBlogs);
 
