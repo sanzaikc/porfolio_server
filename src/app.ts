@@ -9,6 +9,7 @@ import GlobalErrorHandler from "./controllers/errorController";
 
 import authRouter from "./routes/authRoutes";
 import blogRouter from "./routes/blogRoutes";
+import commentRouter from "./routes/commentRoutes";
 import userRouter from "./routes/userRoutes";
 import seedRouter from "./routes/seedRoutes";
 import viewRouter from "./routes/viewRoutes";
@@ -42,6 +43,7 @@ const _base_url: string = "/api";
 
 app.use(`${_base_url}`, authRouter);
 app.use(`${_base_url}/blogs`, blogRouter);
+app.use(`${_base_url}/comments`, commentRouter);
 app.use(`${_base_url}/seed`, seedRouter);
 app.use(`${_base_url}/users`, userRouter);
 
