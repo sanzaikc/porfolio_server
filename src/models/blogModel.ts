@@ -19,49 +19,62 @@ export interface BlogDocument extends BlogInput, Document {
   disable_comments: Boolean;
 }
 
-const blogSchema = new Schema<BlogDocument>({
-  title: {
-    type: String,
-    required: true,
-  },
-  slug: String,
-  coverImage: {
-    type: String,
-    default: null,
-  },
-  content: {
-    type: String,
-    required: true,
-  },
-  flair: {
-    type: String,
-    enum: {
-      values: flairEnums,
-      message: "Invalid blog flair",
+const blogSchema = new Schema<BlogDocument>(
+  {
+    title: {
+      type: String,
+      required: true,
     },
-    default: "article",
+    slug: String,
+    coverImage: {
+      type: String,
+      default: null,
+    },
+    content: {
+      type: String,
+      required: true,
+    },
+    flair: {
+      type: String,
+      enum: {
+        values: flairEnums,
+        message: "Invalid blog flair",
+      },
+      default: "article",
+    },
+    featured: { type: Boolean, default: false },
+    verified: {
+      type: Boolean,
+      default: false,
+    },
+    created_at: {
+      type: Date,
+      default: new Date(),
+    },
+    created_by: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    disable_comments: {
+      type: Boolean,
+      default: false,
+    },
   },
-  featured: { type: Boolean, default: false },
-  verified: {
-    type: Boolean,
-    default: false,
-  },
-  created_at: {
-    type: Date,
-    default: new Date(),
-  },
-  created_by: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-  },
-  disable_comments: {
-    type: Boolean,
-    default: false,
-  },
-});
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
+);
 
 // Index
 blogSchema.index({ featured: 1 });
+
+// Virtual comments fields to populate
+blogSchema.virtual("comments", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "blog",
+});
 
 // Attacting slug before saving doc
 blogSchema.pre("save", function (next) {
@@ -77,12 +90,17 @@ blogSchema.pre("find", function (next) {
   next();
 });
 
-// Populating document with author
+// Populating document
 blogSchema.pre(/^find/, function (next) {
-  this.populate({
-    path: "created_by",
-    select: "name photo",
-  });
+  this.populate([
+    // Populating document with author
+    {
+      path: "created_by",
+      select: "name photo",
+    },
+    // Populating document with comments
+    { path: "comments" },
+  ]);
 
   next();
 });

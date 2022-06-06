@@ -10,7 +10,7 @@ export interface CommentDocument extends CommentInput, Document {
   created_by: Schema.Types.ObjectId;
 }
 
-const commentBlog = new Schema<CommentDocument>({
+const commentSchema = new Schema<CommentDocument>({
   comment: { type: String, required: true },
   blog: {
     type: Schema.Types.ObjectId,
@@ -28,6 +28,19 @@ const commentBlog = new Schema<CommentDocument>({
   },
 });
 
-const Comment = model<CommentDocument>("Comment", commentBlog);
+// Populating comment
+commentSchema.pre(/^find/, function (next) {
+  this.populate(
+    // Populating document with author
+    {
+      path: "created_by",
+      select: "name photo",
+    }
+  );
+
+  next();
+});
+
+const Comment = model<CommentDocument>("Comment", commentSchema);
 
 export default Comment;
