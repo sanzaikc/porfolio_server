@@ -5,15 +5,18 @@ import * as commentController from "./../controllers/commentController";
 
 const router = Router();
 
+// Allow only authenticated user's access
+router.use(authController.protect);
+
 router
   .route("/")
   .get(commentController.getAllComments)
-  .post(authController.protect, commentController.createComment);
+  .post(commentController.createComment);
 
 router
   .route("/:id")
   .get(commentController.getComment)
-  .patch(authController.protect, commentController.updateComment)
-  .delete(authController.protect, commentController.deleteComment);
+  .patch(commentController.updateComment)
+  .delete(commentController.deleteComment);
 
 export default router;

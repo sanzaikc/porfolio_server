@@ -15,10 +15,12 @@ const commentBlog = new Schema<CommentDocument>({
   blog: {
     type: Schema.Types.ObjectId,
     ref: "Blog",
+    required: [true, "A comment must belongs to a blog"],
   },
   created_by: {
     type: Schema.Types.ObjectId,
     ref: "User",
+    required: [true, "A comment must belongs to a user"],
   },
   created_at: {
     type: Date,
