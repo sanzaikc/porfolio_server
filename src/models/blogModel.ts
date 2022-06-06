@@ -79,6 +79,7 @@ blogSchema.virtual("comments", {
 // Attacting slug before saving doc
 blogSchema.pre("save", function (next) {
   this.slug = slugify(this.title, { lower: true });
+  this.created_at = new Date(Date.now());
 
   next();
 });

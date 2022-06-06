@@ -41,6 +41,12 @@ commentSchema.pre(/^find/, function (next) {
   next();
 });
 
+commentSchema.pre("save", function (next) {
+  this.created_at = new Date(Date.now());
+
+  next();
+});
+
 const Comment = model<CommentDocument>("Comment", commentSchema);
 
 export default Comment;
