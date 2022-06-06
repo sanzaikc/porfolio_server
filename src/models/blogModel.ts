@@ -49,7 +49,7 @@ const blogSchema = new Schema<BlogDocument>(
     },
     created_at: {
       type: Date,
-      default: new Date(),
+      default: new Date(Date.now()),
     },
     created_by: {
       type: Schema.Types.ObjectId,
