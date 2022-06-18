@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
+import { OAuth2Client } from "google-auth-library";
+import * as jwt from "jsonwebtoken";
 import crypto from "crypto";
 import dotenv from "dotenv";
-import * as jwt from "jsonwebtoken";
 
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
@@ -13,6 +14,9 @@ dotenv.config();
 const _jwt_secret: string = process.env.JWT_SECRET || "";
 const _jwt_expires_in: string = process.env.JWT_EXPIRES_IN || "7d";
 const _cookie_expires_in: any = process.env.JWT_COOKIE_EXPIRES_IN || 7;
+const _google_oauth_cliend_id = process.env.GOOGLE_OAUTH_CLIENT_ID || "";
+
+const client = new OAuth2Client(_google_oauth_cliend_id);
 
 const signToken = (id: string) => {
   return jwt.sign({ id }, _jwt_secret, {
@@ -257,6 +261,41 @@ export const updatePassword = catchAsync(
     user.password = password;
     user.passwordConfirm = passwordConfirm;
     await user.save();
+
+    createResponseWithToken(user, 200, res);
+  }
+);
+
+export const singInWithGoogle = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { tokenId } = req.body;
+
+    const ticket = await client.verifyIdToken({
+      idToken: tokenId,
+      audience: _google_oauth_cliend_id,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload) return new AppError("Failed to sign in with google", 401);
+
+    console.log(payload);
+
+    const { email, name, sub } = payload;
+
+    let user: UserDocument | null;
+
+    user = await User.findOne({ email: email });
+
+    const defaultPass: string = `${email}-${sub}`;
+
+    if (!user) {
+      user = await User.create({
+        name,
+        email,
+        password: defaultPass,
+        passwordConfirm: defaultPass,
+      });
+    }
 
     createResponseWithToken(user, 200, res);
   }

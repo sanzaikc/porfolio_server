@@ -4,6 +4,8 @@ import * as authController from "./../controllers/authController";
 
 const router = Router();
 
+router.post("/google-signin", authController.singInWithGoogle);
+
 router.post("/signup", authController.signUp);
 
 router.post("/signin", authController.signin);
